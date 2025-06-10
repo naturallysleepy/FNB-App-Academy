@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td colspan="4"><input type="text" id="inputBox" value="0"/></td>
+            </tr>
+            <tr>
+                <td class="digitBtn" onclick="digitBtnPressed(7)">7</td>
+                <td class="digitBtn" onclick="digitBtnPressed(8)">8</td>
+                <td class="digitBtn" onclick="digitBtnPressed(9)">9</td>
+                <td class="operator" onclick="operatorBtnPressed('*')">*</td>
+            </tr>
+            <tr>
+                <td class="digitBtn" onclick="digitBtnPressed(4)">4</td>
+                <td class="digitBtn" onclick="digitBtnPressed(5)">5</td>
+                <td class="digitBtn" onclick="digitBtnPressed(6)">6</td>
+                <td class="operator" onclick="operatorBtnPressed('-')">-</td>
+            </tr>
+            <tr>
+                <td class="digitBtn" onclick="digitBtnPressed(1)">1</td>
+                <td class="digitBtn" onclick="digitBtnPressed(2)">2</td>
+                <td class="digitBtn" onclick="digitBtnPressed(3)">3</td>
+                <td class="operator" onclick="operatorBtnPressed('+')">+</td>
+            </tr>
+            <tr>
+                <td class="digitBtn" colspan="2" onclick="digitBtnPressed(0)">0</td>
+                <td class="clearBtn" onclick="clearScreen()">AC</td>
+                <td class="operator" onclick="operatorBtnPressed('/')">/</td>
+            </tr>
+            <tr>
+                <td class="operator" colspan="4" onclick="evaluateExpression()">=</td>
+            </tr>
+        </table>
+        <script>
+            
+            // Determines if input is on a new line
+            var newLine = true;
+
+            var value1;
+            var currentOperator;
+
+            function digitBtnPressed(button){
+                if (newLine){
+                    // Replaces display with user input
+                    document.getElementById("inputBox").value = button;
+
+                    newLine = false;
+                } else {
+                    var currentValue = document.getElementById("inputBox").value;
+
+                    // Concatenate new input
+                    document.getElementById("inputBox").value = currentValue + button;
+                }
+            }   
+
+            function clearScreen(){
+                // Blanks screen
+                document.getElementById("inputBox").value = 0;
+
+                // Set as new line
+                newLine = true;
+            }
+
+            function operatorBtnPressed(operator){
+                // Store screen value
+                value1 = parseInt(document.getElementById("inputBox").value);
+
+                currentOperator = operator;
+                newLine = true;
+            }
+
+            function evaluateExpression(){
+                var value2 = parseInt(document.getElementById("inputBox").value);
+
+                // Value to return at the end of the calculation
+                var returnValue;
+
+                switch(currentOperator){
+                    case "+":
+                        returnValue = value1 + value2;
+                        break;
+                    case "-":
+                        returnValue = value1 - value2;
+                        break;
+                    case "*":
+                        returnValue = value1 * value2;
+                        break;
+                    case "/":
+                        if (value2 == 0){
+                            document.getElementById("inputBox").value = "undefined";
+                        } else {
+                            returnValue = value1 / value2;
+                        }
+                        break;
+                }
+                // Print return value to screen
+                document.getElementById("inputBox").value = returnValue;
+
+                // Reset values for next calculation
+                value1 = 0;
+                newLine = true;
+            }
+
+
+        </script>
+    </body>
+</html>
