@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body onload="getContact()">
+        <div id="avatarImage"></div>
+        <form id="editForm">
+
+            <label for="firstname">First name</label>
+            <input type="text" name="firstname" id="firstname" readonly>
+            <br/>
+            <label for="lastname">Last name</label>
+            <input type="text" name="lastname" id="lastname" readonly>
+            <br/>
+            <label for="mobile">Mobile</label>
+            <input type="text" name="mobile" id="mobile" readonly>
+            <br/>
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" readonly>
+            <br/>
+            <label for="file" hidden>Change profile image</label>
+            <input type="file" name="avatar" id="avatar" hidden>
+            <br/>
+            <button type="submit" id="submitForm" hidden>Submit</button>
+
+        </form>
+        <br/>
+        <button id="homeLink" type="button">Home</button>
+        <button id="editContact" type="button">Edit</button>
+        <button id="deleteContact" type="button">Delete</button>
+
+        <script src="config.js"></script>
+        <script>
+            // store contact id
+            var id = getId();
+
+            // event handlers for submit and home buttons
+            document.getElementById("submitForm").addEventListener('click', submitForm);
+            document.getElementById("homeLink").addEventListener('click', homeLink);
+
+            // event handler for edit button
+            document.getElementById("editContact").addEventListener('click', editContact);
+
+            function getId(){
+                // copies url of window
+                var url = window.location.href;
+
+                // find = sign in url
+                var pos = url.search("=");
+
+                // grab id from url at index after = sign
+                var id = url.slice(pos + 1);
+
+                return id;
+
+            }
+
+            function getContact(){
+                // 
+                fetch(rootPath + 'controller/get-contacts/?id=' + id)
+                .then(function(response){
+                    return response.json();
+                })
+                .then(function(data){
+                    // display contact info
+                    displayOutput(data);
+
+                    // displays data in console
+                    console.log(data);
+                })
+            }
+
+            function displayOutput(data){
+                // image of contact avatar
+                avatarImg = `
+                    <img src="${rootPath}/controller/uploads/${data[0].avatar}" width="200" />
+                `
+                // displays contact avatar
+                document.getElementById("avatarImage").innerHTML = avatarImg;
+
+                // display the rest of contact data from array
+                document.getElementById("firstname").value = data[0].firstname;
+                document.getElementById("lastname").value = data[0].lastname;
+                document.getElementById("mobile").value = data[0].mobile;
+                document.getElementById("email").value = data[0].email;
+            }
+
+            function editContact(){
+                // allow form elements to be edited
+                document.getElementById("firstname").readOnly = false;
+                document.getElementById("lastname").readOnly = false;
+                document.getElementById("mobile").readOnly = false;
+                document.getElementById("mobile").readOnly = false;
+
+                // unhide hidden elements
+                document.getElementById("avatar").hidden = false;
+                document.getElementById("submitForm").hidden = false
+            }
+            
+
+            function submitForm(e){
+                // prevents page reload instead of submitting form
+                e.preventDefault();
+
+                // stores form data and submits api key
+                const form = new FormData(document.querySelector('#editForm'));
+                form.append('apiKey', apiKey);
+
+                // send form to server
+                fetch(rootPath + 'controller/insert-contact/', {
+                    method: 'POST',
+                    headers: {'Accept': 'application/json, *.*'},
+                    body: form
+                })
+                .then(function(response){
+                    return response.text();
+                })
+                .then(function(data){
+                    if(data == "1"){
+                        // contact is added
+                        alert("Contact added.");
+
+                        // link to home page
+                        homeLink();
+                    }else{
+                        // alert user of error
+                        alert(data);
+
+                        // link to home
+                        homeLink();
+                    }
+                })
+            }
+
+            // links to home page
+            function homeLink(){
+
+                // open home page in current window
+                window.open("index.html", "_self");
+            }
+        </script>
+    </body>
+</html>
