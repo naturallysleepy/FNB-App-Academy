@@ -42,13 +42,13 @@
                 form.append('apiKey', apiKey);
 
                 // send form to server
-                fetch(rootPath + 'controller/insert-contact', {
+                fetch(rootPath + 'controller/insert-contact/', {
                     method: 'POST',
                     headers: {'Accept': 'application/json, *.*'},
                     body: form
                 })
                 .then(function(response){
-                    return response.txt();
+                    return response.text();
                 })
                 .then(function(data){
                     if(data == "1"){

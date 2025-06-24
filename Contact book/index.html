@@ -12,8 +12,9 @@
         <script src="config.js"></script>
         <script>
 
-            // refresh button event handler
+            // refresh button and add contact event handler
             document.getElementById("refresh").addEventListener('click', fetchContacts);
+            document.getElementById("addContact").addEventListener('click', addContact);
 
 
             function fetchContacts(){
@@ -56,7 +57,10 @@
                 document.getElementById("table").innerHTML = output;
             }
 
-
+            // links to add contact page
+            function addContact(){
+                window.open("add-contact.html", "_self");
+            }
 
         </script>
     </body>
