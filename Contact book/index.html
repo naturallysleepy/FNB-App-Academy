@@ -4,15 +4,30 @@
         <meta charset="UTF-8">
         <title></title>
     </head>
-    <body>
+    <body onload="fetchContacts()">
         <div id="table">Contacts</div>
         <button id="refresh" type="button">Refresh</button>
         <button id="addContact" type="button">Add Contact</button>
 
         <script src="config.js"></script>
         <script>
-            //API URL: https://mysite.itvarsity.org/api/ContactBook/
-             
+            function fetchContacts(){
+
+                // call fetch API
+                fetch(rootPath + "controller/get-contacts/")
+                .then(function(response){
+
+                    // convert response into json array
+                    return response.json();
+                })
+                .then(function(data){
+
+                    // displays data from json array
+                    // displayOutput(data);
+                    console.log(data);
+                })
+            }
+
         </script>
     </body>
 </html>
