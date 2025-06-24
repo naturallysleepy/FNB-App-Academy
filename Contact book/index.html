@@ -11,6 +11,11 @@
 
         <script src="config.js"></script>
         <script>
+
+            // refresh button event handler
+            document.getElementById("refresh").addEventListener('click', fetchContacts);
+
+
             function fetchContacts(){
 
                 // call fetch API
@@ -32,14 +37,26 @@
                 output will generate a table in html from the data array*/
                 output = "<table>";
                 
+                // iterate over all data
                 for(a in data){
+
+                    // add a row for each data element
                     output += `
                         <tr>
-                            <td><img src ="${rootPath}controller/uploads/${data[a].avatar}"/></td>
+                            <td><img src ="${rootPath}controller/uploads/${data[a].avatar}" width = "40"/></td>
+                            <td><h5>${data[a].firstname}</h5></td>
+                            <td><h5>${data[a].lastname}</h5></td>
                         </tr>
                     `
                 }
+                // close table
+                output += "</table>";
+
+                // display output
+                document.getElementById("table").innerHTML = output;
             }
+
+
 
         </script>
     </body>
